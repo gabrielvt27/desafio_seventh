@@ -1,4 +1,3 @@
-import 'package:desafio_seventh/app/stores/auth_store.dart';
 import 'package:desafio_seventh/app/stores/login_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';

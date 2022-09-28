@@ -3,6 +3,7 @@ import 'package:desafio_seventh/app/models/login_model.dart';
 import 'package:desafio_seventh/app/services/auth_service.dart';
 import 'package:desafio_seventh/app/stores/auth_store.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class LoginStore {
   String? _user;
@@ -23,10 +24,22 @@ class LoginStore {
   login() async {
     _error.value = null;
 
+    if (_user == null ||
+        _user!.isEmpty ||
+        _password == null ||
+        _password!.isEmpty) {
+      _error.value = "Campos não preenchidos";
+      return;
+    }
+
+    _user = "candidato-seventh";
+    _password = "8n5zSrYq";
+
     try {
       final loginModel = LoginModel(user: _user!, password: _password!);
       final token = await _authService.loginWithUserAndPassword(loginModel);
-      _authStore.token = token;
+      _authStore.setToken(token);
+      Modular.to.pushReplacementNamed('/home');
     } on AuthException catch (e) {
       _error.value = e.message;
     } catch (e) {
