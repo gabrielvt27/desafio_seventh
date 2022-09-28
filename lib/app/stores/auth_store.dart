@@ -1,33 +1,46 @@
-import 'package:desafio_seventh/app/models/tokenization.dart';
-import 'package:desafio_seventh/app/services/auth_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'package:desafio_seventh/app/models/login_model.dart';
+import 'package:desafio_seventh/app/models/tokenization.dart';
+import 'package:desafio_seventh/app/repositories/auth_repository.dart';
+
 class AuthStore {
-  final AuthService _authService;
+  final AuthRepository _authRepository;
   Tokenization? _token;
 
-  AuthStore(this._authService) {
+  AuthStore(this._authRepository) {
     _handleAuthState();
   }
 
+  Tokenization? get token => _token;
   get isLogged => _token != null;
 
   _handleAuthState() async {
-    final jwt = await _authService.getPreferenceToken();
+    final jwt = await _authRepository.getPreferenceToken();
 
     if (jwt != null) {
       _token = Tokenization(accessToken: jwt);
-      Modular.to.pushReplacementNamed('/home');
+      Modular.to.pushReplacementNamed('/home/');
     }
+  }
+
+  loginUser(LoginModel loginModel) async {
+    final token = await _authRepository.loginWithUserAndPassword(loginModel);
+    setToken(token);
+  }
+
+  logoutUser() async {
+    await setToken(null);
+    Modular.to.pushReplacementNamed('/login/');
   }
 
   setToken(Tokenization? token) async {
     _token = token;
 
     if (token == null) {
-      _authService.removePreferenceToken();
+      _authRepository.removePreferenceToken();
     } else {
-      _authService.setPreferenceToken(token.accessToken);
+      _authRepository.setPreferenceToken(token.accessToken);
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppWidget extends StatelessWidget {
@@ -6,14 +7,15 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Modular.setInitialRoute('/home');
+    Modular.setInitialRoute('/home/');
 
     return MaterialApp.router(
       title: 'Desafio Seventh',
       debugShowCheckedModeBanner: false,
-      /*theme: ThemeData(
-        textTheme: GoogleFonts.openSansTextTheme(),
-      ),*/
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 242, 242, 242),
+        textTheme: GoogleFonts.montserratTextTheme(),
+      ),
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
     );

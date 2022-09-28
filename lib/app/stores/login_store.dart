@@ -1,50 +1,51 @@
-import 'package:desafio_seventh/app/errors/auth_exception.dart';
-import 'package:desafio_seventh/app/models/login_model.dart';
-import 'package:desafio_seventh/app/services/auth_service.dart';
-import 'package:desafio_seventh/app/stores/auth_store.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
+
+import 'package:desafio_seventh/app/stores/auth_store.dart';
+import 'package:desafio_seventh/app/models/login_model.dart';
+import 'package:desafio_seventh/app/utils/api_response.dart';
 
 class LoginStore {
   String? _user;
   String? _password;
 
-  final ValueNotifier<String?> _error = ValueNotifier<String?>(null);
+  final ValueNotifier<ApiResponse> loginState =
+      ValueNotifier<ApiResponse>(ApiResponse.initial());
 
-  final AuthService _authService;
   final AuthStore _authStore;
 
-  LoginStore(this._authService, this._authStore);
+  LoginStore(this._authStore);
 
   set user(String val) => _user = val;
   set password(String val) => _password = val;
 
-  get error => error.value;
-
   login() async {
-    _error.value = null;
+    loginState.value = ApiResponse.initial();
 
-    if (_user == null ||
-        _user!.isEmpty ||
-        _password == null ||
-        _password!.isEmpty) {
-      _error.value = "Campos não preenchidos";
+    if (_validateInputs) {
+      loginState.value = ApiResponse.error("Campos não preenchidos");
       return;
     }
 
-    _user = "candidato-seventh";
-    _password = "8n5zSrYq";
+    loginState.value = ApiResponse.loading();
+
+    // _user = "candidato-seventh";
+    // _password = "8n5zSrYq";
 
     try {
       final loginModel = LoginModel(user: _user!, password: _password!);
-      final token = await _authService.loginWithUserAndPassword(loginModel);
-      _authStore.setToken(token);
-      Modular.to.pushReplacementNamed('/home');
-    } on AuthException catch (e) {
-      _error.value = e.message;
+      await _authStore.loginUser(loginModel);
+      loginState.value = ApiResponse.completed();
+      Modular.to.pushReplacementNamed('/home/');
     } catch (e) {
-      print(e.toString());
-      _error.value = "Houve um erro inesperado";
+      loginState.value = ApiResponse.error(e.toString());
     }
   }
+
+  bool get _validateInputs =>
+      _user == null ||
+      _user!.isEmpty ||
+      _password == null ||
+      _password!.isEmpty;
 }

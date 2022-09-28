@@ -1,6 +1,12 @@
-import 'package:desafio_seventh/app/stores/login_store.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
+
+import 'package:desafio_seventh/app/stores/login_store.dart';
+import 'package:desafio_seventh/app/utils/api_response.dart';
+import 'package:desafio_seventh/app/pages/components/error_message_widget.dart';
+import 'package:desafio_seventh/app/pages/components/default_button_widget.dart';
+import 'package:desafio_seventh/app/pages/components/custom_text_field_widget.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -9,39 +15,55 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView(
-        children: [
-          TextField(
-            onChanged: (value) => _loginStore.user = value,
-            keyboardType: TextInputType.text,
-            style: const TextStyle(color: Colors.black),
-            decoration: const InputDecoration(
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomTextFieldWidget(
                 labelText: "Usuário",
-                labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
-                hintText: "Informe a senha"),
-          ),
-          TextField(
-            onChanged: (value) => _loginStore.password = value,
-            obscureText: true,
-            keyboardType: TextInputType.text,
-            style: const TextStyle(color: Colors.black),
-            decoration: const InputDecoration(
+                hintText: "Informe o usuário",
+                prefixIcon: const Icon(
+                  Icons.person_outline,
+                  size: 30,
+                  color: Color(0xffA6B0BD),
+                ),
+                onChanged: (value) => _loginStore.user = value,
+              ),
+              CustomTextFieldWidget(
                 labelText: "Senha",
-                labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
-                hintText: "Informe a senha"),
+                hintText: "Informe a senha",
+                obscureText: true,
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  size: 30,
+                  color: Color(0xffA6B0BD),
+                ),
+                onChanged: (value) => _loginStore.password = value,
+              ),
+              DefaultButtonWidget(
+                text: "LOGIN",
+                onPressed: () => _loginStore.login(),
+              ),
+              Center(
+                child: ValueListenableBuilder<ApiResponse>(
+                  valueListenable: _loginStore.loginState,
+                  builder: (context, value, child) {
+                    if (value.status == Status.error) {
+                      return ErrorMessageWidget(message: value.message!);
+                    } else if (value.status == Status.loading) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              _loginStore.login();
-            },
-            child: const Text(
-              "Login",
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
