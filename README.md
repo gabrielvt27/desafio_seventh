@@ -1,16 +1,15 @@
-# desafio_seventh
+# :pencil: Desafio Seventh
+<p>Aplicação mobile desenvolvida na linguagem Dart utilizando o framework Flutter, voltada ao contexto de videomonitoramento.</p>
 
-A new Flutter project.
+## :hammer: Funcionalidades do projeto
 
-## Getting Started
+- `Funcionalidade 1`: Criação de uma tela de login do usuário
+- `Funcionalidade 2`: Manter o usuário logado após o login
+- `Funcionalidade 3`: Reprodução de um vídeo fornecido pela API
 
-This project is a starting point for a Flutter application.
+## :computer: O que foi utilizado?
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- `HTTP Client`: <a href="https://pub.dev/packages/dio">Dio</a>
+- `Armazenamento local`: <a href="https://pub.dev/packages/shared_preferences">Shared Preferences</a>
+- `Gerenciador de Estados`: <a href="https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html">ValueNotifier</a>
+- `Injeção de dependências e Rotas`: <a href="https://pub.dev/packages/flutter_modular">Flutter Modular</a>
