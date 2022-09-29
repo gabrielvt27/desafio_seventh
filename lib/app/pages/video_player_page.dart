@@ -60,7 +60,7 @@ class VideoPlayerPageState extends State<VideoPlayerPage> {
                     ErrorMessageWidget(message: value.message!),
                     DefaultButtonWidget(
                       text: "LOGOUT",
-                      onPressed: () => () => _authStore.logoutUser(),
+                      onPressed: () => _authStore.logoutUser(),
                     ),
                   ],
                 ),
